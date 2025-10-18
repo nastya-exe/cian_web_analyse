@@ -59,15 +59,15 @@ def change_status_active(link):
 
 
 # Изменение данных объявления
-def data_change(price_new, link, date_new, payment_new):
+def data_change(price_new, link, date_new, payment_new, price_sq_meter_new):
     db = sqlite3.connect(database_url)
     cursor = db.cursor()
 
     cursor.execute("""
         UPDATE info_studios
-        SET price = ?, date_add = ?, payment = ?
+        SET price = ?, date_add = ?, payment = ?, price_sq_meter = ?
         WHERE link = ?
-    """, (price_new, date_new, payment_new, link))
+    """, (price_new, date_new, payment_new, price_sq_meter_new, link))
 
     db.commit()
     db.close()

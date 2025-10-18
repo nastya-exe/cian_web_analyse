@@ -10,7 +10,7 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 from db_rrequests import find_active_ads, save_info_db, change_status_active, data_change
 from config import url_new
-from parser.functions import datetime_of_publication, payment_upon_entry, type_housing
+from functions import datetime_of_publication, payment_upon_entry, type_housing
 
 
 def parser(driver, url):
@@ -71,7 +71,8 @@ def parser(driver, url):
                 )
                 price_int = int(('').join(price.text.split()[:2]))
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
-                payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text, price_int)
+                payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
+                                             price_int)
 
                 # Название ближайшего метро, время до не него, тип передвижения
                 underground_items = driver.find_elements(By.CSS_SELECTOR, "li[data-name='UndergroundItem']")
@@ -100,12 +101,13 @@ def parser(driver, url):
                 square_float = float(name_list[-2].replace(',', '.'))
                 price_sq_meter = round(price_int / square_float, 2)
 
-                #Кол-во комнат и тип квартиры
+                # Кол-во комнат и тип квартиры
                 type_room = type_housing(name_list)[0]
                 num_rooms = type_housing(name_list)[1]
 
                 # Время последнего обновления объявления
-                last_update = (driver.find_elements(By.CSS_SELECTOR, "div[data-testid='metadata-updated-date'] span"))[0]
+                last_update = (driver.find_elements(By.CSS_SELECTOR, "div[data-testid='metadata-updated-date'] span"))[
+                    0]
                 date_time_obj = datetime_of_publication(last_update.text)
 
                 save_info_db(price_int, name_metro.text, href, date_time_obj, payment, time_elem_int, icon_type,
@@ -115,11 +117,12 @@ def parser(driver, url):
                 print(traceback.format_exc())
                 continue
 
+
 # Обновление данных в бд в 15:00 и 20:00
 def update_add(driver, hrefs):
     time_now = datetime.now().time().strftime("%H:%M")
 
-    if '14:50' <= time_now < '15:00' or '20:50' <= time_now < '20:10':
+    if '14:50' <= time_now < '15:00' or '20:00' <= time_now < '20:10':
 
         for href in hrefs:
             driver.get(href)
@@ -137,11 +140,17 @@ def update_add(driver, hrefs):
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
 
                 date_time_obj = datetime_of_publication(last_update.text)
-                price_int = int(('').join(price.text[:6].split()))
+                price_int = int(('').join(price.text.split()[:2]))
                 payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
                                              price_int)
 
-                data_change(price_int, href, date_time_obj, payment)
+                name = driver.find_element(By.CSS_SELECTOR, "div[data-name='OfferTitleNew'] h1").text
+                square_float = float(name.split()[-2].replace(',', '.'))
+                price_sq_meter = round(price_int / square_float, 2)
+
+                price_sq_meter_new = round(price_int / price_sq_meter, 2)
+
+                data_change(price_int, href, date_time_obj, payment, price_sq_meter_new)
 
             except Exception as e:
                 print(f'Ссылка {href}, ошибка {e}')
