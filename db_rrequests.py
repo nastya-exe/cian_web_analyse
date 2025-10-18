@@ -3,26 +3,31 @@ from config import database_url
 
 
 # Добавление объявления в бд
-def save_info_db(ad, price, name_metro, link, date_add, payment):
+def save_info_db(price, name_metro, link, date_add, payment, time_metro,
+                 type_transportation, square, price_sq_meter, num_rooms, type_room):
     db = sqlite3.connect(database_url)
     cursor = db.cursor()
 
     cursor.execute("""
-        INSERT INTO info_studios(name, price, name_metro, link, date_add, payment)
-        VALUES(?, ?, ?, ?, ?, ?)
+        INSERT INTO info_studios(price, name_metro, link, 
+            date_add, payment, time_metro, type_transportation, square, price_sq_meter, num_rooms, type_room)
+        VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(link) DO UPDATE SET
-            name=excluded.name,
             price=excluded.price,
             name_metro=excluded.name_metro,
+            link=excluded.link,
             date_add=excluded.date_add,
-            payment=excluded.payment
-    """, (ad, price, name_metro, link, date_add, payment))
+            payment=excluded.payment,
+            time_metro=excluded.time_metro,
+            type_transportation=excluded.type_transportation
+    """, (price, name_metro, link, date_add, payment, time_metro,
+          type_transportation, square, price_sq_meter, num_rooms, type_room))
 
     db.commit()
     db.close()
 
 
-# Список из всех активных ссылок
+# Список ссылок из всех активных ссылок
 def find_active_ads():
     db = sqlite3.connect(database_url)
     cursor = db.cursor()
@@ -68,35 +73,35 @@ def data_change(price_new, link, date_new, payment_new):
     db.close()
 
 
-# Объявления за последние hours
-def find_ads(hour):
-    db = sqlite3.connect(database_url)
-    cursor = db.cursor()
-
-    cursor.execute(f"""
-		SELECT name, price, name_metro, link, date_add, payment
-		FROM info_studios
-		WHERE DATETIME(date_add) >= DATETIME('now', '-{hour} hour', '+3 hour')
-		ORDER BY date_add
-    """)
-
-    rows = [list(row) for row in cursor.fetchall()]
-    db.close()
-    return rows
-
-
-# Объявления за сегодняшний день
-def find_ads_today():
-    db = sqlite3.connect(database_url)
-    cursor = db.cursor()
-
-    cursor.execute("""
-        SELECT name, price, name_metro, link, date_add, payment
-        FROM info_studios
-        WHERE DATE(date_add) = DATE('now')
-        ORDER BY date_add DESC
-    """)
-
-    rows = [list(row) for row in cursor.fetchall()]
-    db.close()
-    return rows
+# # Объявления за последние hours
+# def find_ads(hour):
+#     db = sqlite3.connect(database_url)
+#     cursor = db.cursor()
+#
+#     cursor.execute(f"""
+# 		SELECT name, price, name_metro, link, date_add, payment, time_metro, type_transportation
+# 		FROM info_studios
+# 		WHERE DATETIME(date_add) >= DATETIME('now', '-{hour} hour', '+3 hour')
+# 		ORDER BY date_add
+#     """)
+#
+#     rows = [list(row) for row in cursor.fetchall()]
+#     db.close()
+#     return rows
+#
+#
+# # Объявления за сегодняшний день
+# def find_ads_today():
+#     db = sqlite3.connect(database_url)
+#     cursor = db.cursor()
+#
+#     cursor.execute("""
+#         SELECT name, price, name_metro, link, date_add, payment, time_metro, type_transportation
+#         FROM info_studios
+#         WHERE DATE(date_add) = DATE('now')
+#         ORDER BY date_add DESC
+#     """)
+#
+#     rows = [list(row) for row in cursor.fetchall()]
+#     db.close()
+#     return rows

@@ -32,33 +32,29 @@ def datetime_of_publication(last_update):
 
 # Подсчет оплаты при заселении
 def payment_upon_entry(deposit, commission, prepayment, price):
-    new_deposit = int((deposit.replace(" ", "")).replace("₽", "")) if deposit !='нет' else 0
-    percent_commission = int(commission.replace("%", "")) if commission !='нет' else 0
-    new_prepayment = int(prepayment.split(' ')[0]) if prepayment !='нет' else 0
+    new_deposit = int((deposit.replace(" ", "")).replace("₽", "")) if deposit != 'нет' else 0
+    percent_commission = int(commission.replace("%", "")) if commission != 'нет' else 0
+    new_prepayment = int(prepayment.split(' ')[0]) if prepayment != 'нет' else 0
 
-    all_summ = round(price + new_deposit + price * percent_commission / 100 + price * new_prepayment)
+    all_summ = round(new_deposit + price * percent_commission / 100 + price * new_prepayment)
 
     return all_summ
 
-def determine_time():
-    flag = False
-    now_time = datetime.now().time()
+# Определение типа жилья и кол-ва комнат
+def type_housing(name):
+    num_rooms = None
+    second_elem = name[1]
+    if "-комн." in second_elem:
+        num_rooms = second_elem.split("-")[0]
+        type_room = name[2].replace(',', '')
+    else:
+        type_room = second_elem.replace(',', '')
 
-    ten_min = timedelta(minutes=10)
-    five_hours = timedelta(hours=2)
-    date_obj = datetime.strptime("15:00:00", "%H:%M:%S")
-
-    if (date_obj - ten_min).time() <= now_time < (date_obj + ten_min).time():
-        flag = True
-    elif (date_obj + five_hours - ten_min).time() <= now_time < (date_obj + five_hours + ten_min).time():
-        flag = True
-
-    return flag
+    return type_room, num_rooms
 
 
-
-if __name__ == '__main__':
-    payment_upon_entry('40 000 ₽', '70%', '1 месяц', 40000)
-    payment_upon_entry('49 000 ₽', 'нет', '1 месяц', 45000)
-
-print(datetime.now().time())
+if __name__ == "__main__":
+    type_housing('Сдается 4-комн. квартира, 80 м²'.split())
+    type_housing('Сдается студия, 24 м²'.split())
+    type_housing('Сдается апартаменты-студия, 32 м²'.split())
+    type_housing('Сдаются 2-комн. апартаменты, 47 м²'.split())
