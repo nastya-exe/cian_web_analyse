@@ -17,7 +17,7 @@ def parser(driver, url):
     driver.get(url)
 
     # Сбор ссылок на объявления с первой страницы
-    links_one = WebDriverWait(driver, 10).until(
+    links_one = WebDriverWait(driver, 20).until(
         EC.presence_of_all_elements_located((By.XPATH, "//a[contains(@class, 'media')]"))
     )
 
@@ -31,7 +31,7 @@ def parser(driver, url):
             continue
 
     # Сбор ссылок на объявления со второй страницы
-    second_page = WebDriverWait(driver, 10).until(
+    second_page = WebDriverWait(driver, 20).until(
         EC.element_to_be_clickable((By.XPATH, "//a[@rel='noopener' and span[text()='2']]"))
     )
     driver.execute_script("arguments[0].scrollIntoView(true);", second_page)
@@ -66,7 +66,7 @@ def parser(driver, url):
                 name_list = name.split()
 
                 # Цена и оплата при заселении
-                price = WebDriverWait(driver, 10).until(
+                price = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
                 )
                 price_int = int(('').join(price.text.split()[:2]))
