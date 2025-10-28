@@ -1,0 +1,228 @@
+/*  Шапка */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #232426;
+  color: #f5eee9;
+  padding: 15px 40px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+header .logo {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #f5eee9;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+  color: #FF8C00;
+}
+
+/*  Основа, центральная часть */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #232426;
+}
+
+h2 {
+    color: #f5eee9;       /* белый цвет текста */
+    text-align: left; /* по центру, если нужно */
+    margin: 20px 0;     /* отступ сверху и снизу */
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.left {
+  flex: 3; /* 3 части для графиков */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f5f5f5;
+}
+
+.right {
+  flex: 0.5; /* 1 часть для фильтров */
+  padding: 20px;
+  padding-right: 40px;
+  background-color: #2f2f30;
+  color: #f5eee9;
+}
+
+.main-graph {
+  height: 400px; /* основной график большой */
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.small-graph {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Фильтры */
+.filter {
+    margin-bottom: 20px; /* расстояние между фильтрами */
+}
+
+.filter label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter input,
+.filter select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    /* background-color: #de6c02; */
+}
+
+/* Кнопки */
+.buttons {
+    margin-top: 20px;  /* отступ сверху от последнего фильтра */
+    margin-bottom: 10px;
+}
+
+.apply-btn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #de6c02;
+    color: #f5eee9;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.filter input,
+.filter select,
+.apply-btn {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.apply-btn:hover {
+    background-color: #FF8C00;
+}
+
+/* Основной график */
+.main-graph {
+    height: 400px; /* высота графика */
+}
+
+#myChart {
+    width: 100%;
+    height: 100%; /* займет всю высоту .main-graph */
+}
+
+.graph-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;      /* расстояние между текстом и селектом */
+    margin-top: 5px; /* небольшой отступ от графика */
+    font-weight: bold;
+    color: #333;
+}
+
+/* 🔹 Топ-станции */
+#graph2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;           /* расстояние между дорогими и дешёвыми блоками */
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Каждая строка: график слева, подпись справа */
+.station-row {
+  display: flex;
+  gap: 15px;
+}
+
+/* График занимает примерно половину */
+.station-chart {
+  flex: 1;
+}
+
+/* Подписи */
+.station-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.station-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.station-list li {
+  margin: 4px 0;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.charts-row {
+  display: flex;
+  gap: 20px;          /* расстояние между графиками */
+  align-items: flex-start;
+  flex-wrap: wrap;    /* на маленьких экранах графики перейдут в колонку */
+}
+
+.main-graph {
+  flex: 2;            /* основной график шире */
+  min-width: 300px;
+}
+
+.small-graph {
+  flex: 1;            /* тепловая карта и круговая диаграмма */
+  min-width: 200px;
+}
+
+.small-graph canvas,
+.main-graph canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+
+/* Цвета для дорогих/дешёвых */
+.station-row:first-child .station-list li { border-left: 4px solid #d62828; }
+.station-row:last-child .station-list li { border-left: 4px solid #2a9d8f; }
+
+

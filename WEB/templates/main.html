@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика аренды квартир по г. Москва</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Аналитика аренды квартир по г. Москва</div>
+    <nav>
+        <ul>
+            <li><a href="/" class="active">Аналитика</a></li>
+            <li><a href="/predict">Предсказание цены</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="container">
+    <!-- Левая часть с графиками -->
+    <!-- Основной грфаик распределения цен -->
+    <div class="left">
+        <div class="charts-row">
+            <!-- Основной график -->
+            <div class="main-graph card">
+                <canvas id="myChart"></canvas>
+                <div class="graph-controls">
+                    <label for="timeFilter">Распределение цен по:</label>
+                    <select id="timeFilter">
+                        <option value="day">Дням</option>
+                        <option value="month" selected>Месяцам</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Тепловая карта -->
+            <div class="small-graph card">
+                <h4>Тепловая карта</h4>
+                <canvas id="heatmapChart"></canvas>
+            </div>
+
+            <!-- Круговая диаграмма -->
+            <div class="small-graph card">
+                <h4>Соотношение типов квартир</h4>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <!-- топ 5 станций -->
+        <div class="small-graph" id="graph2">
+            <!-- 🔹 Дорогие станции -->
+            <div class="station-row">
+                <div class="station-chart">
+                    <canvas id="expensiveChart"></canvas>
+                </div>
+                <div class="station-list">
+                    <h4>Дорогие станции</h4>
+                    <ul>
+                        <li>Парк Культуры — 290 000 ₽/м²</li>
+                        <li>Арбатская — 280 000 ₽/м²</li>
+                        <li>Киевская — 270 000 ₽/м²</li>
+                        <li>Маяковская — 260 000 ₽/м²</li>
+                        <li>Охотный ряд — 255 000 ₽/м²</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 🔹 Дешёвые станции -->
+            <div class="station-row">
+                <div class="station-chart">
+                    <canvas id="cheapChart"></canvas>
+                </div>
+                <div class="station-list">
+                    <h4>Дешёвые станции</h4>
+                    <ul>
+                        <li>Котельники — 85 000 ₽/м²</li>
+                        <li>Жулебино — 90 000 ₽/м²</li>
+                        <li>Новокосино — 92 000 ₽/м²</li>
+                        <li>Бунинская аллея — 95 000 ₽/м²</li>
+                        <li>Щёлковская — 97 000 ₽/м²</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая часть с фильтрами -->
+    <div class="right">
+        <div class="filter-block">
+            <h3>Фильтры</h3>
+
+            <div class="filter">
+                <label for="district">Метро:</label>
+                <input list="metro-list" id="district" placeholder="Выберите станцию">
+                <datalist id="metro-list">
+                    {% for station in metro_stations %}
+                    <option value="{{ station }}">
+                        {% endfor %}
+                </datalist>
+            </div>
+
+            <div class="filter">
+                <label for="distance">Расстояние до метро:</label>
+                <select id="distance">
+                    <option value="">Любое</option>
+                    <option value="Пешком">Пешком</option>
+                    <option value="Транспорт">Транспорт</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="price">Цена до:</label>
+                <input type="number" id="price" placeholder="₽">
+            </div>
+
+            <div class="filter">
+                <label for="rooms">Количество комнат:</label>
+                <select id="rooms">
+                    <option value="">Любое</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4+</option>
+                </select>
+            </div>
+
+            <div class="filter">
+                <label for="type">Тип помещения:</label>
+                <select id="type">
+                    <option value="">Любое</option>
+                    <option value="Квартира">Квартира</option>
+                    <option value="Студия">Студия</option>
+                    <option value="Апартаменты">Апартаменты</option>
+                    <option value="Апартаменты">Апартаменты-студия</option>
+                </select>
+            </div>
+
+            <div class="buttons">
+                <button class="apply-btn">Применить</button>
+            </div>
+
+            <div class="buttons">
+                <button class="apply-btn">Сбросить фильтры</button>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<canvas id="Graph_main"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+</body>
+</html>
