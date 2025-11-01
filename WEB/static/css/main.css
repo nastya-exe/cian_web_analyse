@@ -153,7 +153,7 @@ h2 {
     color: #333;
 }
 
-/* 🔹 Топ-станции */
+/* Топ-станции */
 #graph2 {
   display: flex;
   flex-direction: column;
@@ -209,7 +209,7 @@ h2 {
 }
 
 .small-graph {
-  flex: 1;            /* тепловая карта и круговая диаграмма */
+  flex: 1;            /* круговая диаграмма */
   min-width: 200px;
 }
 
@@ -220,9 +220,33 @@ h2 {
   display: block;
 }
 
+/* для инфо по объявлениям */
+.info-ads {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.info-block {
+    text-align: center;
+}
+
+.info-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4CAF50; /* общий цвет для активных */
+}
+
+.info-value.today {
+    color: #FF8C42; /* акцентный цвет для сегодняшних */
+}
+
+
+
 
 /* Цвета для дорогих/дешёвых */
-.station-row:first-child .station-list li { border-left: 4px solid #d62828; }
-.station-row:last-child .station-list li { border-left: 4px solid #2a9d8f; }
+.station-row:first-child .station-list li { border-left: 4px solid #F2542D; }
+.station-row:last-child .station-list li { border-left: 4px solid #8DC63F; }
 
 

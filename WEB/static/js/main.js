@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 🔹 Основной график
+    // Основной график
     const ctxMain = document.getElementById('myChart').getContext('2d');
+    const labelsRange = window.hist_info.map(item => item[0]);
+    const dataQuants = window.hist_info.map(item => item[1]);
     new Chart(ctxMain, {
         type: 'bar',
         data: {
-            labels: ['Янв','Фев','Мар'],
+            labels: labelsRange,
             datasets: [{
                 label: 'Цена, тыс ₽',
-                data: [120,150,100],
-                backgroundColor: '#4CAF50'
+                data: dataQuants,
+//                салатовый зеленый
+                backgroundColor: '#8DC63F'
             }]
         },
         options: {
@@ -19,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 tooltip: {
                     callbacks: {
                         label: function(context) {
-                            return context.parsed.y + ' ₽';
+                            return context.parsed.y;
                         }
                     }
                 }
@@ -28,16 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🔹 График для дорогих станций
+    // График для дорогих станций
     const ctxExp = document.getElementById('expensiveChart').getContext('2d');
+    const labelsMax = window.metro_max.map(item => item[0]);
+    const dataMax = window.metro_max.map(item => item[1]);
+
     new Chart(ctxExp, {
         type: 'bar',
         data: {
-            labels: ['Парк Культуры','Арбатская','Киевская','Маяковская','Охотный ряд'],
+            labels: labelsMax,
             datasets: [{
                 label: 'Цена ₽/м²',
-                data: [290000,280000,270000,260000,255000],
-                backgroundColor: '#d62828'
+                data: dataMax,
+                backgroundColor: '#F2542D'
             }]
         },
         options: {
@@ -54,16 +60,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🔹 График для дешёвых станций
+    // График для дешёвых станций
     const ctxCheap = document.getElementById('cheapChart').getContext('2d');
+    const labelsMin = window.metro_min.map(item => item[0]);
+    const dataMin = window.metro_min.map(item => item[1]);
     new Chart(ctxCheap, {
         type: 'bar',
         data: {
-            labels: ['Котельники','Жулебино','Новокосино','Бунинская аллея','Щёлковская'],
+            labels: labelsMin,
             datasets: [{
                 label: 'Цена ₽/м²',
-                data: [85000,90000,92000,95000,97000],
-                backgroundColor: '#2a9d8f'
+                data: dataMin,
+                backgroundColor: '#8DC63F'
             }]
         },
         options: {
@@ -80,48 +88,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 🔹 Затычка тепловой карты
-const heatCtx = document.getElementById('heatmapChart').getContext('2d');
-const heatmapChart = new Chart(heatCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Площадь <30м²', '30-50м²', '50-70м²', '70-90м²', '>90м²'],
-        datasets: [
-            { label: 'Студии', data: [5, 10, 7, 3, 2], backgroundColor: '#ff9999' },
-            { label: 'Квартиры', data: [2, 7, 10, 5, 3], backgroundColor: '#66b3ff' },
-            { label: 'Апартаменты', data: [1, 3, 4, 2, 1], backgroundColor: '#99ff99' }
-        ]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'top' },
-            title: { display: true, text: 'Тепловая карта (затычка)' }
-        },
-        scales: {
-            y: { beginAtZero: true }
-        }
-    }
-});
+    // Круговая диаграмма (соотношение типов помещений)
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const labelType = window.type_premises.map(item => item[0]);
+    const dataQuant = window.type_premises.map(item => item[1]);
 
-// 🔹 Круговая диаграмма (соотношение типов квартир)
-const pieCtx = document.getElementById('pieChart').getContext('2d');
-const pieChart = new Chart(pieCtx, {
-    type: 'pie',
-    data: {
-        labels: ['Студии', 'Квартиры', 'Апартаменты'],
-        datasets: [{
-            data: [15, 30, 5],
-            backgroundColor: ['#ff9999','#66b3ff','#99ff99']
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { position: 'bottom' },
-            title: { display: true, text: 'Соотношение типов квартир (затычка)' }
+    const pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: labelType,
+            datasets: [{
+                data: dataQuant,
+                backgroundColor: ['#FF8C42', '#00B4D8', '#90BE6D', '#F9C74F']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' },
+                title: { display: true, text: 'Соотношение типов помещений' }
+            }
         }
-    }
-});
+    });
+
 
 });

@@ -7,10 +7,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
+from selenium.webdriver.chrome.options import Options
 
 from db_rrequests import find_active_ads, save_info_db, change_status_active, data_change
 from config import url_new
 from functions import datetime_of_publication, payment_upon_entry, type_housing
+
 
 def extract_hrefs(links):
     hrefs = []
@@ -22,6 +24,7 @@ def extract_hrefs(links):
         except StaleElementReferenceException:
             continue
     return hrefs
+
 
 def find_links(driver):
     # Сбор ссылок на объявления
@@ -68,7 +71,9 @@ def parser(driver, url):
                 price = WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
                 )
-                price_int = int(''.join(price.text.split()[:2]))
+
+                price_int = int(''.join(num for num in price.text if num.isdigit()))
+
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
                 payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
                                              price_int)
@@ -85,17 +90,6 @@ def parser(driver, url):
                 paths = svg_elem.find_element(By.TAG_NAME, "path")
                 icon_type = "транспорт" if paths.get_attribute("fill-rule") == "evenodd" else "пешком"
 
-                # # Площадь
-                # info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferSummaryInfoGroup'] p")
-                # square_float = None
-                #
-                # # Тут можно вытащить ремонт, год постройки, площадь кухни
-                # for i in range(len(info) - 1):
-                #     if info[i].text == 'Общая площадь':
-                #         square_text = info[i+1].text.split(' ')[0]
-                #         square_float = float(square_text.replace(',', '.'))
-                #         break
-
                 # Площадь квартиры и цена за м2
                 square_float = float(name_list[-2].replace(',', '.'))
                 price_sq_meter = round(price_int / square_float, 2)
@@ -111,6 +105,8 @@ def parser(driver, url):
 
                 save_info_db(price_int, name_metro.text, href, date_time_obj, payment, time_elem_int, icon_type,
                              square_float, price_sq_meter, num_rooms, type_room)
+
+                print('ok')
             except Exception as e:
                 print(f'Ссылка {href}, ошибка {e}')
                 print(traceback.format_exc())
@@ -139,7 +135,7 @@ def update_add(driver, hrefs):
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
 
                 date_time_obj = datetime_of_publication(last_update.text)
-                price_int = int(''.join(price.text.split()[:2]))
+                price_int = int(''.join(num for num in price.text if num.isdigit()))
                 payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
                                              price_int)
 
@@ -147,9 +143,7 @@ def update_add(driver, hrefs):
                 square_float = float(name.split()[-2].replace(',', '.'))
                 price_sq_meter = round(price_int / square_float, 2)
 
-                price_sq_meter_new = round(price_int / price_sq_meter, 2)
-
-                data_change(price_int, href, date_time_obj, payment, price_sq_meter_new)
+                data_change(price_int, href, date_time_obj, payment, price_sq_meter)
 
             except Exception as e:
                 print(f'Ссылка {href}, ошибка {e}')
@@ -159,7 +153,13 @@ def update_add(driver, hrefs):
 
 def start(url):
     while True:
-        driver = webdriver.Chrome()
+        chrome_options = Options()
+        # chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--blink-settings=imagesEnabled=false")  # не грузить картинки
+
+        driver = webdriver.Chrome(options=chrome_options)
+
         update_add(driver, find_active_ads())
         parser(driver, url)
         driver.quit()

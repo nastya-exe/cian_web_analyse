@@ -47,6 +47,9 @@ def type_housing(name):
     if "-комн." in second_elem:
         num_rooms = second_elem.split("-")[0]
         type_room = name[2].replace(',', '')
+    elif 'многокомнатная' in name:
+        type_room = 'квартира'
+        num_rooms = '6+'
     else:
         type_room = second_elem.replace(',', '')
 
