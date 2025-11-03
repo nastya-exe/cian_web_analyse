@@ -13,6 +13,12 @@
     <div class="logo">Аналитика аренды квартир по г. Москва</div>
     <nav>
         <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">Все объявления ▼</a>
+                <div class="dropdown-content">
+                    <a href="/">Активные</a>
+                </div>
+            </li>
             <li><a href="/" class="active">Аналитика</a></li>
             <li><a href="/predict">Предсказание цены</a></li>
         </ul>
@@ -36,8 +42,8 @@
                 <h4>Статистика по объявлениям</h4>
                 <div class="info-numbers">
                     <div class="info-block">
-                        <div class="info-value">{{ all_active_ads }}</div>
-                        <div class="info-label">Всего активных</div>
+                        <div class="info-value">{{ total }}</div>
+                        <div class="info-label">Всего объявлений</div>
                     </div>
                     <div class="info-block">
                         <div class="info-value today">+{{ ads_today }}</div>
@@ -92,55 +98,57 @@
         <div class="filter-block">
             <h3>Фильтры</h3>
 
-            <div class="filter">
-                <label for="district">Метро:</label>
-                <input list="metro-list" id="district" placeholder="Введите станцию метро">
-                <datalist id="metro-list">
-                    {% for name in name_metro %}
-                    <option value="{{ name }}"></option>
-                    {% endfor %}
-                </datalist>
+            <form action="/request" method="get">
+                <input type="hidden" name="active" value="no">
+                <div class="filter">
+                    <label for="district">Метро:</label>
+                    <input list="metro-list" id="district" placeholder="Введите станцию метро">
+                    <datalist id="metro-list">
+                        {% for name in name_metro %}
+                        <option value="{{ name }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <div class="filter">
+                    <label for="price">Цена до:</label>
+                    <input type="number" id="price" placeholder="₽">
+                </div>
+
+                <div class="filter">
+                    <label for="rooms">Количество комнат:</label>
+                    <select id="rooms">
+                        <option value="">Любое</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="4">5</option>
+                        <option value="4">6+</option>
+
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label for="type">Тип помещения:</label>
+                    <select id="type">
+                        <option value="">Любое</option>
+                        <option value="Квартира">Квартира</option>
+                        <option value="Студия">Студия</option>
+                        <option value="Апартаменты">Апартаменты</option>
+                        <option value="Апартаменты">Апартаменты-студия</option>
+                    </select>
+                </div>
+
+                <div class="buttons">
+                    <button class="apply-btn">Применить</button>
+                </div>
+
+                <div class="buttons">
+                    <button class="apply-btn">Сбросить фильтры</button>
+                </div>
+
             </div>
-
-            <div class="filter">
-                <label for="price">Цена до:</label>
-                <input type="number" id="price" placeholder="₽">
-            </div>
-
-            <div class="filter">
-                <label for="rooms">Количество комнат:</label>
-                <select id="rooms">
-                    <option value="">Любое</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="4">5</option>
-                    <option value="4">6+</option>
-
-                </select>
-            </div>
-
-            <div class="filter">
-                <label for="type">Тип помещения:</label>
-                <select id="type">
-                    <option value="">Любое</option>
-                    <option value="Квартира">Квартира</option>
-                    <option value="Студия">Студия</option>
-                    <option value="Апартаменты">Апартаменты</option>
-                    <option value="Апартаменты">Апартаменты-студия</option>
-                </select>
-            </div>
-
-            <div class="buttons">
-                <button class="apply-btn">Применить</button>
-            </div>
-
-            <div class="buttons">
-                <button class="apply-btn">Сбросить фильтры</button>
-            </div>
-
-        </div>
     </div>
 
 

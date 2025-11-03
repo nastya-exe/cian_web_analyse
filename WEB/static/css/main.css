@@ -243,6 +243,49 @@ h2 {
 }
 
 
+/* Выбор активных-всех обявлений */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    color: #f5eee9;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #232426;
+    min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: #f5eee9; /* текст всегда светлый */
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    transition: 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #FF8C00;
+    color: #232426;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
 
 
 /* Цвета для дорогих/дешёвых */

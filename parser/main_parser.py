@@ -1,6 +1,7 @@
 import time
 import traceback
 from datetime import datetime
+from itertools import count
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -116,6 +117,7 @@ def parser(driver, url):
 # Обновление данных в бд в 15:00 и 20:00
 def update_add(driver, hrefs):
     time_now = datetime.now().time().strftime("%H:%M")
+    num = 0
 
     if '14:50' <= time_now < '15:00' or '20:00' <= time_now < '20:10':
 
@@ -127,14 +129,11 @@ def update_add(driver, hrefs):
                 continue
 
             try:
-                price = WebDriverWait(driver, 10).until(
+                price = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
                 )
-                last_update = (driver.find_elements(By.CSS_SELECTOR, "div[data-testid='metadata-updated-date'] span"))[
-                    0]
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
 
-                date_time_obj = datetime_of_publication(last_update.text)
                 price_int = int(''.join(num for num in price.text if num.isdigit()))
                 payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
                                              price_int)
@@ -143,7 +142,10 @@ def update_add(driver, hrefs):
                 square_float = float(name.split()[-2].replace(',', '.'))
                 price_sq_meter = round(price_int / square_float, 2)
 
-                data_change(price_int, href, date_time_obj, payment, price_sq_meter)
+                data_change(price_int, href, payment, price_sq_meter)
+
+                num += 1
+                print(num)
 
             except Exception as e:
                 print(f'Ссылка {href}, ошибка {e}')
@@ -154,7 +156,7 @@ def update_add(driver, hrefs):
 def start(url):
     while True:
         chrome_options = Options()
-        # chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--headless=new")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--blink-settings=imagesEnabled=false")  # не грузить картинки
 
