@@ -1,13 +1,13 @@
 {% extends "main.html" %}
 
+
 {% block dropdown %}
-<a href="#" class="dropbtn">Все объявления ▼</a>
+<a href="#" class="dropbtn">Активные ▼</a>
 <div class="dropdown-content">
-    <a href="/">Активные</a>
+    <a href="/all-ads">Все объявления</a>
 </div>
 {% endblock %}
 
-{% block info_label %}Всего объявлений{% endblock %}
 
 {% block info_numbers %}
 <div class="info-block">
@@ -20,8 +20,10 @@
 </div>
 {% endblock %}
 
+
 {% block input_active %}
-<input type="hidden" name="active" value="no">
+<input type="hidden" name="active" value="yes">
 {% endblock %}
 
-{% block button_reset %} <a href="/all-ads" class="apply-btn">Сбросить фильтры</a> {% endblock %}
+
+{% block button_reset %} <a href="/" class="apply-btn">Сбросить фильтры</a> {% endblock %}

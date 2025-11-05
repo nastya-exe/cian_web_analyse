@@ -14,10 +14,8 @@
     <nav>
         <ul>
             <li class="dropdown">
-                <a href="#" class="dropbtn">Активные ▼</a>
-                <div class="dropdown-content">
-                    <a href="/all-ads">Все объявления</a>
-                </div>
+                {% block dropdown %}
+                {% endblock %}
             </li>
             <li><a href="/" class="active">Аналитика</a></li>
             <li><a href="/predict">Предсказание цены</a></li>
@@ -41,14 +39,7 @@
             <div class="info-ads card">
                 <h4>Статистика по объявлениям</h4>
                 <div class="info-numbers">
-                    <div class="info-block">
-                        <div class="info-value">{{ all_active_ads }}</div>
-                        <div class="info-label">Всего активных</div>
-                    </div>
-                    <div class="info-block">
-                        <div class="info-value today">+{{ ads_today }}</div>
-                        <div class="info-label">За сегодня</div>
-                    </div>
+                    {% block info_numbers %} {% endblock %}
                 </div>
             </div>
 
@@ -99,10 +90,11 @@
             <h3>Фильтры</h3>
 
             <form action="/request" method="get">
-                <input type="hidden" name="active" value="yes">
+                {% block input_active %} {% endblock %}
                 <div class="filter">
                     <label for="district">Метро:</label>
-                    <input list="metro-list" id="district" name="metro" placeholder="Введите станцию метро">
+                    <input list="metro-list" id="district" name="metro" placeholder="Введите станцию метро"
+                           value="{{ request.args.get('metro', '') }}">
                     <datalist id="metro-list">
                         {% for name in name_metro %}
                         <option value="{{ name }}"></option>
@@ -112,19 +104,20 @@
 
                 <div class="filter">
                     <label for="price">Цена до:</label>
-                    <input type="number" id="price" name="price" placeholder="₽">
+                    <input type="number" id="price" name="price" placeholder="₽"
+                           value="{{ request.args.get('price', '') }}">
                 </div>
 
                 <div class="filter">
                     <label for="rooms">Количество комнат:</label>
                     <select id="rooms" name="rooms">
                         <option value="">Любое</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="4">5</option>
-                        <option value="4">6+</option>
+                        <option value="1" {% if request.args.get('rooms') == '1' %}selected{% endif %}>1</option>
+                        <option value="2" {% if request.args.get('rooms') == '2' %}selected{% endif %}>2</option>
+                        <option value="3" {% if request.args.get('rooms') == '3' %}selected{% endif %}>3</option>
+                        <option value="4" {% if request.args.get('rooms') == '4' %}selected{% endif %}>4</option>
+                        <option value="5" {% if request.args.get('rooms') == '5' %}selected{% endif %}>5</option>
+                        <option value="6+" {% if request.args.get('rooms') == '6+' %}selected{% endif %}>6+</option>
 
                     </select>
                 </div>
@@ -133,10 +126,14 @@
                     <label for="type">Тип помещения:</label>
                     <select id="type" name="type_premises">
                         <option value="">Любое</option>
-                        <option value="Квартира">Квартира</option>
-                        <option value="Студия">Студия</option>
-                        <option value="Апартаменты">Апартаменты</option>
-                        <option value="Апартаменты">Апартаменты-студия</option>
+                        <option value="Квартира" {% if request.args.get(
+                        'type_premises') == 'Квартира' %}selected{% endif %}>Квартира</option>
+                        <option value="Студия" {% if request.args.get(
+                        'type_premises') == 'Студия' %}selected{% endif %}>Студия</option>
+                        <option value="Апартаменты" {% if request.args.get(
+                        'type_premises') == 'Апартаменты' %}selected{% endif %}>Апартаменты</option>
+                        <option value="Апартаменты-студия" {% if request.args.get(
+                        'type_premises') == 'Апартаменты-студия' %}selected{% endif %}>Апартаменты-студия</option>
                     </select>
                 </div>
 
@@ -145,7 +142,7 @@
                 </div>
 
                 <div class="buttons">
-                    <button class="apply-btn">Сбросить фильтры</button>
+                    {% block button_reset %} {% endblock %}
                 </div>
             </form>
         </div>

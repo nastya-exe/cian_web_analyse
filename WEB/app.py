@@ -35,7 +35,7 @@ def variables_start(active):
 def start_page():
     variable = variables_start(True)
 
-    return render_template('main.html', **variable)
+    return render_template('start.html', **variable)
 
 
 @app.route('/all-ads')
@@ -56,12 +56,12 @@ def request_page_active():
     is_active = active == 'yes'
 
     hist_info = histogram_info(database_url, is_active, metro, price, rooms, typ)
-    metro_max = top_five_ads(database_url, is_active, True)
-    metro_min = top_five_ads(database_url, is_active, True)
+    metro_max = top_five_ads(database_url, 'max', is_active)
+    metro_min = top_five_ads(database_url, 'min', is_active)
     ads_today = number_ads_today(database_url, metro, price, rooms, typ)
     all_active_ads = all_ads(database_url, is_active, metro, price, rooms, typ)
     type_premises = premises_quantity(database_url, is_active, metro, price, rooms, typ)
-    html = 'request.html' if is_active else 'request_non_active.html'
+    html = 'request.html' if is_active else 'request_all_ads.html'
 
     return render_template(html,
                            metro_max=metro_max,

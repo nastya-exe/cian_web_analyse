@@ -1,7 +1,6 @@
 import time
 import traceback
 from datetime import datetime
-from itertools import count
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -69,7 +68,7 @@ def parser(driver, url):
                 name_list = name.split()
 
                 # Цена и оплата при заселении
-                price = WebDriverWait(driver, 15).until(
+                price = WebDriverWait(driver, 20).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
                 )
 
@@ -129,7 +128,7 @@ def update_add(driver, hrefs):
                 continue
 
             try:
-                price = WebDriverWait(driver, 20).until(
+                price = WebDriverWait(driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
                 )
                 payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")

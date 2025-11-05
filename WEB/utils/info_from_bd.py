@@ -16,7 +16,10 @@ def number_ads_today(url, metro=None, price=None, rooms=None, type_premises=None
     if price:
         act += f' AND price <= {price}'
     if rooms:
-        act += f' AND num_rooms = {rooms}'
+        if rooms.isnumeric():
+            act += f' AND num_rooms = {rooms}'
+        else:
+            act += f' AND num_rooms = "{rooms}"'
     if type_premises:
         act += f' AND type_room = "{type_premises}"'
 
@@ -30,21 +33,22 @@ def number_ads_today(url, metro=None, price=None, rooms=None, type_premises=None
     db.close()
     return rows[0]
 
-print(number_ads_today(database_url))
-
 
 # Кол-во всех/активных объявлений
 def all_ads(url, active, metro=None, price=None, rooms=None, type_premises=None):
     db = sqlite3.connect(url)
     cursor = db.cursor()
 
-    act = 'WHERE active = 1' if active else ''
+    act = 'WHERE active = 1' if active else 'WHERE active in (0, 1)'
     if metro:
         act += f' AND name_metro = "{metro}"'
     if price:
         act += f' AND price <= {price}'
     if rooms:
-        act += f' AND num_rooms = {rooms}'
+        if rooms.isnumeric():
+            act += f' AND num_rooms = {rooms}'
+        else:
+            act += f' AND num_rooms = "{rooms}"'
     if type_premises:
         act += f' AND type_room = "{type_premises}"'
 
@@ -67,7 +71,7 @@ def top_five_ads(url, max_min, active):
     cursor = db.cursor()
 
     order = 'DESC' if max_min == 'max' else 'ASC'
-    act = 'WHERE active = 1' if active else ''
+    act = 'WHERE active = 1' if active else 'WHERE active in (0, 1)'
 
     query = f"""
         SELECT 
@@ -90,13 +94,16 @@ def top_five_ads(url, max_min, active):
 def premises_quantity(url, active, metro=None, price=None, rooms=None, type_premises=None):
     db = sqlite3.connect(url)
     cursor = db.cursor()
-    act = 'WHERE active = 1' if active else ''
+    act = 'WHERE active = 1' if active else 'WHERE active in (0, 1)'
     if metro:
         act += f' AND name_metro = "{metro}"'
     if price:
         act += f' AND price <= {price}'
     if rooms:
-        act += f' AND num_rooms = {rooms}'
+        if rooms.isnumeric():
+            act += f' AND num_rooms = {rooms}'
+        else:
+            act += f' AND num_rooms = "{rooms}"'
     if type_premises:
         act += f' AND type_room = "{type_premises}"'
 
@@ -119,13 +126,16 @@ def premises_quantity(url, active, metro=None, price=None, rooms=None, type_prem
 def histogram_info(url, active, metro=None, price=None, rooms=None, type_premises=None):
     db = sqlite3.connect(url)
     cursor = db.cursor()
-    act = 'WHERE active = 1' if active else ''
+    act = 'WHERE active = 1' if active else 'WHERE active in (0, 1)'
     if metro:
         act += f' AND name_metro = "{metro}"'
     if price:
         act += f' AND price <= {price}'
     if rooms:
-        act += f' AND num_rooms = {rooms}'
+        if rooms.isnumeric():
+            act += f' AND num_rooms = {rooms}'
+        else:
+            act += f' AND num_rooms = "{rooms}"'
     if type_premises:
         act += f' AND type_room = "{type_premises}"'
 
@@ -172,3 +182,41 @@ def all_name_metro(url):
     """, )
     rows = cursor.fetchall()
     return rows
+
+
+# Топ 5 мин макс объявлений по конкретной станции по м2 активные и все объявления
+def top_five_metro_ads(url, max_min, active, metro=None, price=None, rooms=None, type_premises=None):
+    db = sqlite3.connect(url)
+    cursor = db.cursor()
+
+    order = 'DESC' if max_min == 'max' else 'ASC'
+    act = 'WHERE active = 1' if active else 'WHERE active in (0, 1)'
+
+    if metro:
+        act += f' AND name_metro = "{metro}"'
+    if price:
+        act += f' AND price <= {price}'
+    if rooms:
+        if rooms.isnumeric():
+            act += f' AND num_rooms = {rooms}'
+        else:
+            act += f' AND num_rooms = "{rooms}"'
+    if type_premises:
+        act += f' AND type_room = "{type_premises}"'
+
+    query = f"""
+        SELECT 
+            name_metro,
+            ROUND(AVG(price_sq_meter), 0) AS avg_price
+        FROM info_studios
+        {act}
+        GROUP BY name_metro
+        ORDER BY avg_price {order}
+        LIMIT 5;
+    """
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    db.close()
+    return rows
+
