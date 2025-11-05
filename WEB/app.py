@@ -1,24 +1,25 @@
 from flask import Flask, render_template, request
 
-from utils.info_from_bd import top_five_ads, premises_quantity, histogram_info, all_name_metro, number_ads_today, \
-    all_ads
+from utils.info_from_bd import InfoBd
 from config import database_url
 
 app = Flask(__name__)
 
 
 def variables_start(active):
-    name_metro = [name[0] for name in all_name_metro(database_url)]
-    metro_max = top_five_ads(database_url, 'max', active)
-    metro_min = top_five_ads(database_url, 'min', active)
+    info = InfoBd(database_url, is_active=active)
 
-    type_premises = premises_quantity(database_url, active)
+    name_metro = [name[0] for name in info.all_name_metro()]
+    metro_max = info.top_five_ads(max_min='max')
+    metro_min = info.top_five_ads(max_min='min')
 
-    hist_info = histogram_info(database_url, active)
+    type_premises = info.premises_quantity()
 
-    all_active_ads = all_ads(database_url, active)
-    ads_today = number_ads_today(database_url)
-    total = all_ads(database_url, active)
+    hist_info = info.histogram_info()
+
+    all_active_ads = info.all_ads()
+    ads_today = info.number_ads_today()
+    total = InfoBd(database_url).all_ads()
 
     return {
         'name_metro': name_metro,
@@ -28,19 +29,20 @@ def variables_start(active):
         'hist_info': hist_info,
         'ads_today': ads_today,
         'all_active_ads': all_active_ads,
-        'total': total}
+        'total': total
+    }
 
 
 @app.route('/')
 def start_page():
-    variable = variables_start(True)
+    variable = variables_start('yes')
 
     return render_template('start.html', **variable)
 
 
 @app.route('/all-ads')
 def all_ads_page():
-    variable = variables_start(False)
+    variable = variables_start('no')
 
     return render_template('all_ads.html', **variable)
 
@@ -55,12 +57,14 @@ def request_page_active():
 
     is_active = active == 'yes'
 
-    hist_info = histogram_info(database_url, is_active, metro, price, rooms, typ)
-    metro_max = top_five_ads(database_url, 'max', is_active)
-    metro_min = top_five_ads(database_url, 'min', is_active)
-    ads_today = number_ads_today(database_url, metro, price, rooms, typ)
-    all_active_ads = all_ads(database_url, is_active, metro, price, rooms, typ)
-    type_premises = premises_quantity(database_url, is_active, metro, price, rooms, typ)
+    info = InfoBd(database_url, active, metro, price, rooms, typ)
+
+    hist_info = info.histogram_info()
+    metro_max = info.top_five_ads('max')
+    metro_min = info.top_five_ads('min')
+    ads_today = info.number_ads_today()
+    all_active_ads = info.all_ads()
+    type_premises = info.premises_quantity()
     html = 'request.html' if is_active else 'request_all_ads.html'
 
     return render_template(html,
