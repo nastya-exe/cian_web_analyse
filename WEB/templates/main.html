@@ -55,15 +55,11 @@
             <!-- Дорогие станции -->
             <div class="station-row">
                 <div class="station-chart">
-                    <canvas id="expensiveChart"></canvas>
+                    {% block station_chart %} {% endblock %}
                 </div>
                 <div class="station-list">
-                    <h4>Дорогие станции</h4>
-                    <ul>
-                        {% for name, price in metro_max %}
-                        <li>{{ name }} — {{ "{:.0f}".format(price) }} ₽/м²</li>
-                        {% endfor %}
-                    </ul>
+                    {% block expensive_stations %}
+                    {% endblock %}
                 </div>
             </div>
 
@@ -73,12 +69,8 @@
                     <canvas id="cheapChart"></canvas>
                 </div>
                 <div class="station-list">
-                    <h4>Дешёвые станции</h4>
-                    <ul>
-                        {% for name, price in metro_min %}
-                        <li>{{ name }} — {{ "{:.0f}".format(price) }} ₽/м²</li>
-                        {% endfor %}
-                    </ul>
+                    {% block cheap_stations %}
+                    {% endblock %}
                 </div>
             </div>
         </div>

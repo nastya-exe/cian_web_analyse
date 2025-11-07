@@ -27,3 +27,24 @@
 
 
 {% block button_reset %} <a href="/" class="apply-btn">Сбросить фильтры</a> {% endblock %}
+
+{% block station_chart %}<canvas id="expensiveChart"></canvas>{% endblock %}
+
+
+{% block expensive_stations %}
+<h4>Дорогие станции</h4>
+<ul>
+    {% for name, price in metro_max %}
+    <li>{{ name }} — {{ "{:.0f}".format(price) }} ₽/м²</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block cheap_stations %}
+<h4>Дешевые станции</h4>
+<ul>
+    {% for name, price in metro_min %}
+    <li>{{ name }} — {{ "{:.0f}".format(price) }} ₽/м²</li>
+    {% endfor %}
+</ul>
+{% endblock %}

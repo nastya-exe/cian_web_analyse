@@ -69,16 +69,31 @@ class InfoBd:
     # Топ 5 мин макс объявлений по м2 активные и все объявления
     def top_five_ads(self, max_min):
         act = self.filters()
+        group = "" if self.metro else f"GROUP BY name_metro"
 
-        order = 'DESC' if max_min == 'max' else 'ASC'
-
-        query = f"""
+        if self.metro:
+            path = f"""
+            SELECT
+                name_metro,
+                ROUND(price_sq_meter, 0) AS avg_price
+            FROM info_studios
+            WHERE {act} 
+            """
+        else:
+            path = f"""
             SELECT
                 name_metro,
                 ROUND(AVG(price_sq_meter), 0) AS avg_price
             FROM info_studios
             WHERE {act}
-            GROUP BY name_metro
+            {group}   
+            """
+
+
+        order = 'DESC' if max_min == 'max' else 'ASC'
+
+        query = f"""
+            {path}
             ORDER BY avg_price {order}
             LIMIT 5;
         """
@@ -142,13 +157,44 @@ class InfoBd:
             return cursor.fetchall()
 
     def all_name_metro(self):
-        db = sqlite3.connect(self.url)
-        cursor = db.cursor()
-        cursor.execute("""
+        query = f"""
             SELECT
             DISTINCT(name_metro)
             FROM info_studios
             ORDER BY name_metro
-        """, )
-        rows = cursor.fetchall()
-        return rows
+        """
+
+        with self._connect() as db:
+            cursor = db.cursor()
+            cursor.execute(query)
+            return cursor.fetchall()
+
+    def heatmap(self, max_min):
+        act = self.filters()
+        order = 'DESC' if max_min == 'max' else 'ASC'
+
+        query = f"""
+            SELECT 
+                ROUND(square / 5) * 5 AS square_group,
+                ROUND(price / 5000) * 5 AS price_group,
+                COUNT(*) AS count
+            FROM info_studios
+            WHERE {act}
+            GROUP BY square_group, price_group
+            ORDER BY price_group {order}
+            LIMIT 5;
+        """
+
+        with self._connect() as db:
+            cursor = db.cursor()
+            cursor.execute(query)
+            return cursor.fetchall()
+
+q = InfoBd(database_url, metro='Шелепиха')
+print(q.heatmap('max'))
+print(q.heatmap('min'))
+
+
+
+
+

@@ -76,9 +76,9 @@ def request_page_active():
                            all_active_ads=all_active_ads)
 
 
-# @app.route('/predict')
-# def predict_page():
-#     return render_template('predict.html')
+@app.route('/predict')
+def predict_page():
+    return render_template('predict.html')
 
 
 if __name__ == "__main__":
