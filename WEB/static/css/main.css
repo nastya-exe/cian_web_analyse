@@ -45,7 +45,7 @@ body {
 
 h2 {
     color: #f5eee9;       /* белый цвет текста */
-    text-align: left; /* по центру, если нужно */
+    text-align: left; /* по центру */
     margin: 20px 0;     /* отступ сверху и снизу */
 }
 
@@ -103,19 +103,18 @@ h2 {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 1em;
-    /* background-color: #de6c02; */
 }
 
 /* Кнопки */
 .buttons {
-    margin-top: 20px;  /* отступ сверху от последнего фильтра */
+    margin-top: 20px; /* отступ сверху от последнего фильтра */
     margin-bottom: 10px;
 }
 
 .apply-btn {
     width: 100%;
     padding: 10px;
-    font-size: 16px;            /* фиксируем размер текста */
+    font-size: 16px;
     line-height: 1.2;
     border: none;
     border-radius: 5px;
@@ -124,7 +123,7 @@ h2 {
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s;
-    text-align: center;      /* для ссылки */
+    text-align: center; /* для ссылки */
     text-decoration: none;
     display: inline-block;
     box-sizing: border-box;
@@ -142,19 +141,19 @@ h2 {
 
 /* Основной график */
 .main-graph {
-    height: 400px; /* высота графика */
+    height: 400px;
 }
 
 #myChart {
     width: 100%;
-    height: 100%; /* займет всю высоту .main-graph */
+    height: 100%;
 }
 
 .graph-controls {
     display: flex;
     align-items: center;
-    gap: 10px;      /* расстояние между текстом и селектом */
-    margin-top: 5px; /* небольшой отступ от графика */
+    gap: 10px; /* расстояние между текстом и селектом */
+    margin-top: 5px;
     font-weight: bold;
     color: #333;
 }
@@ -163,7 +162,7 @@ h2 {
 #graph2 {
   display: flex;
   flex-direction: column;
-  gap: 20px;           /* расстояние между дорогими и дешёвыми блоками */
+  gap: 20px; /* расстояние между дорогими и дешёвыми блоками */
   padding: 15px;
   background-color: #fff;
   border-radius: 8px;
@@ -204,18 +203,18 @@ h2 {
 
 .charts-row {
   display: flex;
-  gap: 20px;          /* расстояние между графиками */
+  gap: 20px; /* расстояние между графиками */
   align-items: flex-start;
-  flex-wrap: wrap;    /* на маленьких экранах графики перейдут в колонку */
+  flex-wrap: wrap; /* оптимиз для экранов */
 }
 
 .main-graph {
-  flex: 2;            /* основной график шире */
+  flex: 2;
   min-width: 300px;
 }
 
 .small-graph {
-  flex: 1;            /* круговая диаграмма */
+  flex: 1; /* круговая диаграмма */
   min-width: 200px;
 }
 
@@ -245,11 +244,11 @@ h2 {
 }
 
 .info-value.today {
-    color: #FF8C42; /* акцентный цвет для сегодняшних */
+    color: #FF8C42;
 }
 
 
-/* Выбор активных-всех обявлений */
+/* Выбор активных-всех объявлений */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -275,7 +274,7 @@ h2 {
 }
 
 .dropdown-content a {
-    color: #f5eee9; /* текст всегда светлый */
+    color: #f5eee9;
     padding: 8px 12px;
     text-decoration: none;
     display: block;
