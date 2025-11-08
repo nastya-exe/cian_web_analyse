@@ -6,7 +6,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 
 from db_rrequests import find_active_ads, save_info_db, change_status_active, data_change
@@ -21,7 +21,7 @@ def extract_hrefs(links):
             href = link.get_attribute("href")
             if href:
                 hrefs.append(href)
-        except StaleElementReferenceException:
+        except Exception:
             continue
     return hrefs
 
