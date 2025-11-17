@@ -133,7 +133,7 @@ def update_add(driver, hrefs):
     num_act = 0
     num_non_act = 0
 
-    if '14:50' <= time_now < '15:00' or '20:00' <= time_now < '20:10':
+    if '14:10' <= time_now < '15:00' or '20:00' <= time_now < '20:10':
 
         for href in hrefs:
             driver.get(href)
@@ -145,21 +145,6 @@ def update_add(driver, hrefs):
                 continue
 
             try:
-                # price = WebDriverWait(driver, 10).until(
-                #     EC.presence_of_element_located((By.CSS_SELECTOR, "div[data-testid='price-amount'] span"))
-                # )
-                # payment_info = driver.find_elements(By.CSS_SELECTOR, "div[data-name='OfferFactItem'] span")
-                #
-                # price_int = int(''.join(num for num in price.text if num.isdigit()))
-                # payment = payment_upon_entry(payment_info[3].text, payment_info[5].text, payment_info[7].text,
-                #                              price_int)
-                #
-                # name = driver.find_element(By.CSS_SELECTOR, "div[data-name='OfferTitleNew'] h1").text
-                # square_float = float(name.split()[-2].replace(',', '.'))
-                # price_sq_meter = round(price_int / square_float, 2)
-                #
-                # data_change(price_int, href, payment, price_sq_meter)
-
                 num_act += 1
                 print(f'активные: {num_act}')
 
