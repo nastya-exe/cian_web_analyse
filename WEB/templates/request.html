@@ -1,0 +1,21 @@
+{% extends "start.html" %}
+
+{% block station_chart %} <canvas id="expensiveChart"></canvas> {% endblock %}
+
+{% block expensive_stations %}
+<h4>Дорогие объявления</h4>
+<ul>
+    {% for name, price in metro_max %}
+    <li>{{ "{:.0f}".format(price) }} ₽/м²</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block cheap_stations %}
+<h4>Дешевые объявления</h4>
+<ul>
+    {% for name, price in metro_min %}
+    <li>{{ "{:.0f}".format(price) }} ₽/м²</li>
+    {% endfor %}
+</ul>
+{% endblock %}

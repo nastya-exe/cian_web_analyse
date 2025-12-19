@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика аренды</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+
+<body>
+
+<!--шапка-->
+<header>
+    <div class="logo">Аналитика аренды квартир по г. Москва</div>
+    <nav>
+        <ul>
+            <li class="dropdown">
+                {% block dropdown %}
+                {% endblock %}
+            </li>
+            <li><a href="/" class="active">Аналитика</a></li>
+            <li><a href="/predict">Предсказание цены</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!--ниже шапки + фильтры-->
+<div class="container">
+    <!-- Левая часть с графиками -->
+    <div class="left">
+        <!--участок с первым верхним блоком-->
+        <div class="charts-row">
+            <!-- Основной график распределения цен -->
+            <div class="main-graph card">
+                <h4>Кол-во объявлений в зависимости от цены</h4>
+                <canvas id="myChart"></canvas>
+            </div>
+
+            <!-- Информация по объявлениям -->
+            <div class="info-ads card">
+                <h4>Статистика по объявлениям</h4>
+                <div class="info-numbers">
+                    {% block info_numbers %} {% endblock %}
+                </div>
+            </div>
+
+            <!-- Круговая диаграмма -->
+            <div class="small-graph card">
+                <h4>Типы помещений, их кол-во</h4>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <!--нижний участок-->
+        <div class="small-graph" id="graph2">
+            <!-- Дорогие станции -->
+            <div class="station-row">
+                <div class="station-chart">
+                    {% block station_chart %} {% endblock %}
+                </div>
+                <div class="station-list">
+                    {% block expensive_stations %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <!--Дешёвые станции-->
+            <div class="station-row">
+                <div class="station-chart">
+                    <canvas id="cheapChart"></canvas>
+                </div>
+                <div class="station-list">
+                    {% block cheap_stations %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Правая часть с фильтрами -->
+    <div class="right">
+        <div class="filter-block">
+            <h3>Фильтры</h3>
+
+            <form action="/request" method="get">
+                {% block input_active %} {% endblock %}
+                <div class="filter">
+                    <label for="district">Метро:</label>
+                    <input list="metro-list" id="district" name="metro" placeholder="Введите станцию метро"
+                           value="{{ request.args.get('metro', '') }}">
+                    <datalist id="metro-list">
+                        {% for name in name_metro %}
+                        <option value="{{ name }}"></option>
+                        {% endfor %}
+                    </datalist>
+                </div>
+
+                <div class="filter">
+                    <label for="price">Цена до:</label>
+                    <input type="number" id="price" name="price" placeholder="₽"
+                           value="{{ request.args.get('price', '') }}">
+                </div>
+
+                <div class="filter">
+                    <label for="rooms">Количество комнат:</label>
+                    <select id="rooms" name="rooms">
+                        <option value="">Любое</option>
+                        <option value="1" {% if request.args.get('rooms') == '1' %}selected{% endif %}>1</option>
+                        <option value="2" {% if request.args.get('rooms') == '2' %}selected{% endif %}>2</option>
+                        <option value="3" {% if request.args.get('rooms') == '3' %}selected{% endif %}>3</option>
+                        <option value="4" {% if request.args.get('rooms') == '4' %}selected{% endif %}>4</option>
+                        <option value="5" {% if request.args.get('rooms') == '5' %}selected{% endif %}>5</option>
+                        <option value="6+" {% if request.args.get('rooms') == '6+' %}selected{% endif %}>6+</option>
+
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label for="type">Тип помещения:</label>
+                    <select id="type" name="type_premises">
+                        <option value="">Любое</option>
+                        <option value="Квартира" {% if request.args.get(
+                        'type_premises') == 'Квартира' %}selected{% endif %}>Квартира</option>
+                        <option value="Студия" {% if request.args.get(
+                        'type_premises') == 'Студия' %}selected{% endif %}>Студия</option>
+                        <option value="Апартаменты" {% if request.args.get(
+                        'type_premises') == 'Апартаменты' %}selected{% endif %}>Апартаменты</option>
+                        <option value="Апартаменты-студия" {% if request.args.get(
+                        'type_premises') == 'Апартаменты-студия' %}selected{% endif %}>Апартаменты-студия</option>
+                    </select>
+                </div>
+
+                <div class="buttons">
+                    <button class="apply-btn">Применить</button>
+                </div>
+
+                <div class="buttons">
+                    {% block button_reset %} {% endblock %}
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+</div>
+<canvas id="Graph_main"></canvas>
+<script>window.metro_max = {{ metro_max | tojson }};</script>
+<script>window.metro_min = {{ metro_min | tojson }};</script>
+<script>window.type_premises = {{ type_premises | tojson }};</script>
+<script>window.hist_info = {{ hist_info | tojson }};</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+
+</body>
+</html>

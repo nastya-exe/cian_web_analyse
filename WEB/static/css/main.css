@@ -1,0 +1,300 @@
+/*  Шапка */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #232426;
+  color: #f5eee9;
+  padding: 15px 40px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+header .logo {
+  font-size: 1.3em;
+  font-weight: bold;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: #f5eee9;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+  color: #FF8C00;
+}
+
+/*  Основа, центральная часть */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #232426;
+}
+
+h2 {
+    color: #f5eee9;       /* белый цвет текста */
+    text-align: left; /* по центру */
+    margin: 20px 0;     /* отступ сверху и снизу */
+}
+
+.container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.left {
+  flex: 3; /* 3 части для графиков */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f5f5f5;
+}
+
+.right {
+  flex: 0.5; /* 1 часть для фильтров */
+  padding: 20px;
+  padding-right: 40px;
+  background-color: #2f2f30;
+  color: #f5eee9;
+}
+
+.main-graph {
+  height: 400px; /* основной график большой */
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.small-graph {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Фильтры */
+.filter {
+    margin-bottom: 20px; /* расстояние между фильтрами */
+}
+
+.filter label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.filter input,
+.filter select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+}
+
+/* Кнопки */
+.buttons {
+    margin-top: 20px; /* отступ сверху от последнего фильтра */
+    margin-bottom: 10px;
+}
+
+.apply-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    line-height: 1.2;
+    border: none;
+    border-radius: 5px;
+    background-color: #de6c02;
+    color: #f5eee9;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center; /* для ссылки */
+    text-decoration: none;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+.filter input,
+.filter select,
+.apply-btn {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.apply-btn:hover {
+    background-color: #FF8C00;
+}
+
+/* Основной график */
+.main-graph {
+    height: 400px;
+}
+
+#myChart {
+    width: 100%;
+    height: 100%;
+}
+
+.graph-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* расстояние между текстом и селектом */
+    margin-top: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Топ-станции */
+#graph2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* расстояние между дорогими и дешёвыми блоками */
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Каждая строка: график слева, подпись справа */
+.station-row {
+  display: flex;
+  gap: 15px;
+}
+
+/* График занимает примерно половину */
+.station-chart {
+  flex: 1;
+}
+
+/* Подписи */
+.station-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.station-list ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.station-list li {
+  margin: 4px 0;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+}
+
+.charts-row {
+  display: flex;
+  gap: 20px; /* расстояние между графиками */
+  align-items: flex-start;
+  flex-wrap: wrap; /* оптимиз для экранов */
+}
+
+.main-graph {
+  flex: 2;
+  min-width: 300px;
+}
+
+.small-graph {
+  flex: 1; /* круговая диаграмма */
+  min-width: 200px;
+}
+
+.small-graph canvas,
+.main-graph canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* для инфо по объявлениям */
+.info-ads {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.info-block {
+    text-align: center;
+}
+
+.info-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #4CAF50; /* общий цвет для активных */
+}
+
+.info-value.today {
+    color: #FF8C42;
+}
+
+
+/* Выбор активных-всех объявлений */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    color: #f5eee9;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #232426;
+    min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 1;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: #f5eee9;
+    padding: 8px 12px;
+    text-decoration: none;
+    display: block;
+    transition: 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #FF8C00;
+    color: #232426;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+
+
+
+/* Цвета для дорогих/дешёвых */
+.station-row:first-child .station-list li { border-left: 4px solid #F2542D; }
+.station-row:last-child .station-list li { border-left: 4px solid #8DC63F; }
+
+
